@@ -1,0 +1,56 @@
+;<<<Start of the script>>>
+
+:start
+filename = 'File_Name_'				;Filename
+delay = 1							;Delay of each loop in secs
+goto setup
+
+
+;<<<General setup>>>
+:setup
+	time = delay * 1000
+	call init_file
+goto main
+
+
+
+:main
+	call timestamp
+		filewrite fhandle ","
+	mpause 10	
+	call one
+		filewrite fhandle ","
+	mpause 10
+	call two	
+		filewrite fhandle #13#10
+	mpause time	
+	goto main	
+
+
+;>>>Get TimeStamp<<<
+
+:timestamp
+	gettime logtime
+	getdate logdate
+	filewrite fhandle logdate
+	filewrite fhandle ' '
+	filewrite fhandle logtime
+return	
+
+;>>>Initialize file<<<
+
+:init_file
+	gettime logtime "%Y_%m_%d-%H_%M_%S.csv"
+	strconcat filename logtime
+	fileopen fhandle filename 1
+	filewriteln fhandle "Time,one,two"
+return
+
+:one
+	filewrite fhandle 'In Development'
+	mpause 10
+return
+
+:two
+	filewrite fhandle 'In Development'
+return
